@@ -33,9 +33,3 @@ func DatabaseConnection() *gorm.DB {
 	fmt.Println("Database connected")
 	return db
 }
-
-func CloseDatabaseConnection(db *gorm.DB) {
-	dbSQL, err := db.DB()
-	exception.PanicIfNeeded(err)
-	dbSQL.Close()
-}

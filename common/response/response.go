@@ -7,8 +7,8 @@ type SuccessResponse struct {
 }
 
 type ErrorResponse struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
+	Status  int      `json:"status"`
+	Message []string `json:"message"`
 }
 
 func BuildSuccessResponse(code int, message string, data interface{}) SuccessResponse {
