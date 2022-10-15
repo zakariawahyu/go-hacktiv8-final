@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/zakariawahyu/go-hacktiv8-final/entity"
+	"github.com/zakariawahyu/go-hacktiv8-final/exception"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
@@ -11,9 +12,7 @@ import (
 
 func DatabaseConnection() *gorm.DB {
 	errEnv := godotenv.Load()
-	if errEnv != nil {
-		panic(errEnv.Error())
-	}
+	exception.PanicIfNeeded(errEnv)
 
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
@@ -23,9 +22,7 @@ func DatabaseConnection() *gorm.DB {
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s sslmode=disable TimeZone=Asia/Jakarta", dbHost, dbUsername, dbPassword, dbPort, dbName)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic(err)
-	}
+	exception.PanicIfNeeded(err)
 
 	db.AutoMigrate(
 		&entity.User{},
@@ -39,8 +36,6 @@ func DatabaseConnection() *gorm.DB {
 
 func CloseDatabaseConnection(db *gorm.DB) {
 	dbSQL, err := db.DB()
-	if err != nil {
-		panic(err)
-	}
+	exception.PanicIfNeeded(err)
 	dbSQL.Close()
 }

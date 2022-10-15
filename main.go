@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/zakariawahyu/go-hacktiv8-final/config"
-	"net/http"
 )
 
 func main() {
@@ -12,9 +12,10 @@ func main() {
 	config.CloseDatabaseConnection(db)
 
 	// Setup Fiber
-	app := fiber.New()
+	app := fiber.New(config.NewFiberConfig())
+	app.Use(recover.New())
 	app.Get("/", func(ctx *fiber.Ctx) error {
-		return ctx.Status(http.StatusOK).JSON(fiber.Map{
+		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
 			"message": "Hello world!",
 		})
 	})
