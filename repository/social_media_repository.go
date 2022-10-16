@@ -26,9 +26,8 @@ func (repository *SocialMediaRepositoryImpl) Create(socialMedia entity.SocialMed
 func (repository *SocialMediaRepositoryImpl) GetAll(userID int64) []entity.SocialMedia {
 	var socialMedia []entity.SocialMedia
 
-	err := repository.db.Where("user_id = ?", userID).Find(&socialMedia).Error
+	err := repository.db.Where("user_id = ?", userID).Preload("User").Find(&socialMedia).Error
 	exception.PanicIfNeeded(err)
 
-	repository.db.Preload("User").Find(&socialMedia)
 	return socialMedia
 }

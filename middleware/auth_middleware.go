@@ -3,7 +3,6 @@ package middleware
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
-	"github.com/zakariawahyu/go-hacktiv8-final/exception"
 	"github.com/zakariawahyu/go-hacktiv8-final/services"
 	"log"
 	"strings"
@@ -15,7 +14,9 @@ func AuthorizeJWT(jwtServices services.JWTServices) fiber.Handler {
 		tokenArr := strings.Split(authHeader, "Bearer ")
 
 		if len(tokenArr) != 2 {
-			exception.PanicIfNeeded("No token provided")
+			return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"message": "No token provided",
+			})
 		}
 
 		tokenStr := tokenArr[1]

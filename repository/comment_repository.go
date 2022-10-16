@@ -26,9 +26,8 @@ func (repository *CommentRepositoryImpl) Create(comment entity.Comment) entity.C
 func (repository *CommentRepositoryImpl) GetAll(userID int64) []entity.Comment {
 	var comment []entity.Comment
 
-	err := repository.db.Where("user_id = ?", userID).Find(&comment).Error
+	err := repository.db.Where("user_id = ?", userID).Preload("User").Preload("Photo").Find(&comment).Error
 	exception.PanicIfNeeded(err)
 
-	repository.db.Preload("User").Preload("Photo").Find(&comment)
 	return comment
 }

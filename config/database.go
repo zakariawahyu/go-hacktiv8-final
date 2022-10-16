@@ -7,6 +7,7 @@ import (
 	"github.com/zakariawahyu/go-hacktiv8-final/exception"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"os"
 )
 
@@ -21,7 +22,9 @@ func DatabaseConnection() *gorm.DB {
 	dbName := os.Getenv("DB_NAME")
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s sslmode=disable TimeZone=Asia/Jakarta", dbHost, dbUsername, dbPassword, dbPort, dbName)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	exception.PanicIfNeeded(err)
 
 	db.AutoMigrate(
