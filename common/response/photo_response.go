@@ -36,18 +36,18 @@ func NewPhotoResponse(photo entity.Photo) PhotoResponse {
 	}
 }
 
-func NewPhotoResponseArray(task []entity.Photo) []PhotoResponseAll {
+func NewPhotoResponseArray(photo []entity.Photo) []PhotoResponseAll {
 	photoRes := []PhotoResponseAll{}
-	for _, value := range task {
+	for _, value := range photo {
 		photo := PhotoResponseAll{
 			ID:        value.ID,
 			Title:     value.Title,
 			Caption:   value.Caption,
 			PhotoUrl:  value.PhotoUrl,
-			CreatedAt: value.CreatedAt,
-			UpdatedAt: value.UpdatedAt,
 			UserID:    value.UserID,
 			User:      NewUserResponse(value.User),
+			CreatedAt: value.CreatedAt,
+			UpdatedAt: value.UpdatedAt,
 		}
 		photoRes = append(photoRes, photo)
 	}

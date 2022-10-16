@@ -11,3 +11,8 @@ type PhotoRepository interface {
 	Create(photo entity.Photo) entity.Photo
 	GetAll(userID int64) []entity.Photo
 }
+
+type CommentRepository interface {
+	Create(comment entity.Comment) entity.Comment
+	GetAll(userID int64) []entity.Comment
+}

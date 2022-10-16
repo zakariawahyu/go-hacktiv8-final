@@ -13,11 +13,14 @@ func main() {
 	db := config.DatabaseConnection()
 	userRepository := repository.NewUserRepository(db)
 	photoRepository := repository.NewPhotoRepository(db)
+	commentRepository := repository.NewCommentRepository(db)
 	jwtServices := services.NewJWTServices()
 	userServices := services.NewUserServices(userRepository)
 	photoServices := services.NewPhotoServices(photoRepository)
+	commentServices := services.NewCommentServices(commentRepository)
 	userController := controller.NewUserController(userServices, jwtServices)
 	photoController := controller.NewPhotoController(photoServices, jwtServices, userServices)
+	commentController := controller.NewCommentController(commentServices, jwtServices, userServices)
 
 	// Setup Fiber
 	app := fiber.New(config.NewFiberConfig())
@@ -29,5 +32,6 @@ func main() {
 	})
 	userController.Routes(app)
 	photoController.Routes(app)
+	commentController.Routes(app)
 	app.Listen(":8081")
 }

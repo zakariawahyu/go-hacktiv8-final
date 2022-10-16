@@ -23,3 +23,8 @@ type PhotoServices interface {
 	CreatePhoto(request dto.PhotoRequest) response.PhotoResponse
 	AllPhoto(userID int64) []response.PhotoResponseAll
 }
+
+type CommentServices interface {
+	CreatePhoto(request dto.CommentRequest) response.CommentResponse
+	AllPhoto(userID int64) []response.CommentResponseAll
+}
