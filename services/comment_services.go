@@ -20,7 +20,7 @@ func NewCommentServices(commentRepository repository.CommentRepository) CommentS
 	}
 }
 
-func (services *CommentServicesImpl) CreatePhoto(request dto.CommentRequest) response.CommentResponse {
+func (services *CommentServicesImpl) CreateComment(request dto.CommentRequest) response.CommentResponse {
 	var comment entity.Comment
 
 	errValidate := validations.ValidateComment(request)
@@ -35,7 +35,7 @@ func (services *CommentServicesImpl) CreatePhoto(request dto.CommentRequest) res
 	return res
 }
 
-func (services *CommentServicesImpl) AllPhoto(userID int64) []response.CommentResponseAll {
+func (services *CommentServicesImpl) AllComment(userID int64) []response.CommentResponseAll {
 	result := services.commentRepo.GetAll(userID)
 	res := response.NewCommentResponseArray(result)
 

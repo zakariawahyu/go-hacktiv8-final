@@ -25,7 +25,7 @@ func NewPhotoController(photoServices services.PhotoServices, jwtServices servic
 
 func (controller *PhotoController) Routes(app *fiber.App) {
 	app.Post("/photos", controller.Create)
-	app.Get("/photos", controller.GetAllTask)
+	app.Get("/photos", controller.GetAllPhoto)
 }
 
 func (controller *PhotoController) Create(ctx *fiber.Ctx) error {
@@ -44,7 +44,7 @@ func (controller *PhotoController) Create(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(res)
 }
 
-func (controller *PhotoController) GetAllTask(ctx *fiber.Ctx) error {
+func (controller *PhotoController) GetAllPhoto(ctx *fiber.Ctx) error {
 	claims := controller.jwtServices.GetClaimsJWT(ctx)
 	email := fmt.Sprintf("%v", claims["email"])
 	user := controller.userServices.FindUserByEmail(email)

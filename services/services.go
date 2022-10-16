@@ -25,6 +25,11 @@ type PhotoServices interface {
 }
 
 type CommentServices interface {
-	CreatePhoto(request dto.CommentRequest) response.CommentResponse
-	AllPhoto(userID int64) []response.CommentResponseAll
+	CreateComment(request dto.CommentRequest) response.CommentResponse
+	AllComment(userID int64) []response.CommentResponseAll
+}
+
+type SocialMediaServices interface {
+	CreateSocialMedia(request dto.SocialMediaRequest) response.SocialMediaResponse
+	AllSocialMedia(userID int64) []response.SocialMediaResponseAll
 }

@@ -16,3 +16,8 @@ type CommentRepository interface {
 	Create(comment entity.Comment) entity.Comment
 	GetAll(userID int64) []entity.Comment
 }
+
+type SocialMediaRepository interface {
+	Create(socialMedia entity.SocialMedia) entity.SocialMedia
+	GetAll(userID int64) []entity.SocialMedia
+}

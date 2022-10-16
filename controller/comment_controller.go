@@ -25,7 +25,7 @@ func NewCommentController(commentServices services.CommentServices, jwtServices 
 
 func (controller *CommentController) Routes(app *fiber.App) {
 	app.Post("/comments", controller.Create)
-	app.Get("/comments", controller.GetAllTask)
+	app.Get("/comments", controller.GetAllComment)
 }
 
 func (controller *CommentController) Create(ctx *fiber.Ctx) error {
@@ -39,17 +39,17 @@ func (controller *CommentController) Create(ctx *fiber.Ctx) error {
 	user := controller.userServices.FindUserByEmail(email)
 	request.UserID = user.ID
 
-	comment := controller.commentServices.CreatePhoto(request)
+	comment := controller.commentServices.CreateComment(request)
 	res := response.BuildSuccessResponse(fiber.StatusCreated, "Success", comment)
 	return ctx.Status(fiber.StatusCreated).JSON(res)
 }
 
-func (controller *CommentController) GetAllTask(ctx *fiber.Ctx) error {
+func (controller *CommentController) GetAllComment(ctx *fiber.Ctx) error {
 	claims := controller.jwtServices.GetClaimsJWT(ctx)
 	email := fmt.Sprintf("%v", claims["email"])
 	user := controller.userServices.FindUserByEmail(email)
 
-	comment := controller.commentServices.AllPhoto(user.ID)
+	comment := controller.commentServices.AllComment(user.ID)
 	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", comment)
 	return ctx.JSON(res)
 }

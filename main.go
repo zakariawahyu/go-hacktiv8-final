@@ -14,13 +14,16 @@ func main() {
 	userRepository := repository.NewUserRepository(db)
 	photoRepository := repository.NewPhotoRepository(db)
 	commentRepository := repository.NewCommentRepository(db)
+	socialMediaRepository := repository.NewSocialMediaRepository(db)
 	jwtServices := services.NewJWTServices()
 	userServices := services.NewUserServices(userRepository)
 	photoServices := services.NewPhotoServices(photoRepository)
 	commentServices := services.NewCommentServices(commentRepository)
+	socialMediaServices := services.NewSocialMediaServices(socialMediaRepository)
 	userController := controller.NewUserController(userServices, jwtServices)
 	photoController := controller.NewPhotoController(photoServices, jwtServices, userServices)
 	commentController := controller.NewCommentController(commentServices, jwtServices, userServices)
+	socialMediaController := controller.NewSocialMediaController(socialMediaServices, jwtServices, userServices)
 
 	// Setup Fiber
 	app := fiber.New(config.NewFiberConfig())
@@ -33,5 +36,6 @@ func main() {
 	userController.Routes(app)
 	photoController.Routes(app)
 	commentController.Routes(app)
+	socialMediaController.Routes(app)
 	app.Listen(":8081")
 }
