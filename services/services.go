@@ -16,4 +16,10 @@ type JWTServices interface {
 type UserServices interface {
 	RegisterUser(request dto.RegisterRequest) response.UserResponse
 	LoginUser(request dto.LoginRequest) response.UserResponse
+	FindUserByEmail(email string) response.UserResponse
+}
+
+type PhotoServices interface {
+	CreatePhoto(request dto.PhotoRequest) response.PhotoResponse
+	AllPhoto(userID int64) []response.PhotoResponseAll
 }

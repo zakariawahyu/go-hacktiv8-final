@@ -60,3 +60,10 @@ func comparePassword(hashPass string, plainPass []byte) bool {
 	}
 	return true
 }
+
+func (services *UserServicesImpl) FindUserByEmail(email string) response.UserResponse {
+	result := services.userRepo.FindByEmail(email)
+	res := response.NewUserResponse(result)
+
+	return res
+}
