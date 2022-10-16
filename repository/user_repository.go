@@ -46,6 +46,16 @@ func (repository *UserRepositoryImpl) Update(user entity.User) entity.User {
 	return user
 }
 
+func (repository *UserRepositoryImpl) Delete(userID int64) entity.User {
+	var user entity.User
+	err := repository.db.Where("id = ?", userID).Delete(&user)
+	if err.RowsAffected == 0 {
+		exception.PanicIfNeeded("Record not found")
+	}
+
+	return user
+}
+
 func hashAndSalt(password []byte) string {
 	hash, err := bcrypt.GenerateFromPassword(password, bcrypt.MinCost)
 	exception.PanicIfNeeded(err)

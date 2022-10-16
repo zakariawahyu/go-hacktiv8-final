@@ -29,6 +29,7 @@ func (controller *CommentController) Routes(app *fiber.App) {
 	app.Post("/comments", middleware.AuthorizeJWT(controller.jwtServices), controller.Create)
 	app.Get("/comments", middleware.AuthorizeJWT(controller.jwtServices), controller.GetAllComment)
 	app.Put("/comments/:id", middleware.AuthorizeJWT(controller.jwtServices), controller.Update)
+	app.Delete("/comments/:id", middleware.AuthorizeJWT(controller.jwtServices), controller.Delete)
 }
 
 func (controller *CommentController) Create(ctx *fiber.Ctx) error {
@@ -72,5 +73,19 @@ func (controller *CommentController) Update(ctx *fiber.Ctx) error {
 
 	comment := controller.commentServices.UpdateComment(request)
 	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", comment)
+	return ctx.JSON(res)
+}
+
+func (controller *CommentController) Delete(ctx *fiber.Ctx) error {
+	id, _ := strconv.Atoi(ctx.Params("id"))
+
+	claims := controller.jwtServices.GetClaimsJWT(ctx)
+	email := fmt.Sprintf("%v", claims["email"])
+	findUser := controller.userServices.FindUserByEmail(email)
+
+	_ = controller.commentServices.DeleteById(int64(id), findUser.ID)
+	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", fiber.Map{
+		"message": "Your comment has been successfully deleted",
+	})
 	return ctx.JSON(res)
 }

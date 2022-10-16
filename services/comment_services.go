@@ -56,3 +56,10 @@ func (services *CommentServicesImpl) UpdateComment(request dto.UpdateCommentRequ
 
 	return res
 }
+
+func (services *CommentServicesImpl) DeleteById(id int64, userId int64) response.CommentResponse {
+	result := services.commentRepo.Delete(id, userId)
+
+	res := response.NewCommentResponse(result)
+	return res
+}

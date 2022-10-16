@@ -38,3 +38,13 @@ func (repository *SocialMediaRepositoryImpl) Update(socialMedia entity.SocialMed
 
 	return socialMedia
 }
+
+func (repository *SocialMediaRepositoryImpl) Delete(id int64, userID int64) entity.SocialMedia {
+	var socialMedia entity.SocialMedia
+	err := repository.db.Where("id = ? AND user_id = ?", id, userID).Delete(&socialMedia)
+	if err.RowsAffected == 0 {
+		exception.PanicIfNeeded("Record not found")
+	}
+
+	return socialMedia
+}

@@ -29,6 +29,7 @@ func (controller *PhotoController) Routes(app *fiber.App) {
 	app.Post("/photos", middleware.AuthorizeJWT(controller.jwtServices), controller.Create)
 	app.Get("/photos", middleware.AuthorizeJWT(controller.jwtServices), controller.GetAllPhoto)
 	app.Put("/photos/:id", middleware.AuthorizeJWT(controller.jwtServices), controller.Update)
+	app.Delete("/photos/:id", middleware.AuthorizeJWT(controller.jwtServices), controller.Delete)
 }
 
 func (controller *PhotoController) Create(ctx *fiber.Ctx) error {
@@ -72,5 +73,19 @@ func (controller *PhotoController) Update(ctx *fiber.Ctx) error {
 
 	photo := controller.photoServices.UpdatePhoto(request)
 	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", photo)
+	return ctx.JSON(res)
+}
+
+func (controller *PhotoController) Delete(ctx *fiber.Ctx) error {
+	id, _ := strconv.Atoi(ctx.Params("id"))
+
+	claims := controller.jwtServices.GetClaimsJWT(ctx)
+	email := fmt.Sprintf("%v", claims["email"])
+	findUser := controller.userServices.FindUserByEmail(email)
+
+	_ = controller.photoServices.DeleteById(int64(id), findUser.ID)
+	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", fiber.Map{
+		"message": "Your photo has been successfully deleted",
+	})
 	return ctx.JSON(res)
 }

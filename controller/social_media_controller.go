@@ -29,7 +29,7 @@ func (controller *SocialMediaController) Routes(app *fiber.App) {
 	app.Post("/socialmedias", middleware.AuthorizeJWT(controller.jwtServices), controller.Create)
 	app.Get("/socialmedias", middleware.AuthorizeJWT(controller.jwtServices), controller.GetAllSocialMedia)
 	app.Put("/socialmedias/:id", middleware.AuthorizeJWT(controller.jwtServices), controller.Update)
-
+	app.Delete("/socialmedias/:id", middleware.AuthorizeJWT(controller.jwtServices), controller.Delete)
 }
 
 func (controller *SocialMediaController) Create(ctx *fiber.Ctx) error {
@@ -73,5 +73,19 @@ func (controller *SocialMediaController) Update(ctx *fiber.Ctx) error {
 
 	socialMedia := controller.socialMediaServices.UpdateSocialMedia(request)
 	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", socialMedia)
+	return ctx.JSON(res)
+}
+
+func (controller *SocialMediaController) Delete(ctx *fiber.Ctx) error {
+	id, _ := strconv.Atoi(ctx.Params("id"))
+
+	claims := controller.jwtServices.GetClaimsJWT(ctx)
+	email := fmt.Sprintf("%v", claims["email"])
+	findUser := controller.userServices.FindUserByEmail(email)
+
+	_ = controller.socialMediaServices.DeleteById(int64(id), findUser.ID)
+	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", fiber.Map{
+		"message": "Your social media has been successfully deleted",
+	})
 	return ctx.JSON(res)
 }

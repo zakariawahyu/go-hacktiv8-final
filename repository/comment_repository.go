@@ -38,3 +38,13 @@ func (repository *CommentRepositoryImpl) Update(comment entity.Comment) entity.C
 
 	return comment
 }
+
+func (repository *CommentRepositoryImpl) Delete(id int64, userID int64) entity.Comment {
+	var comment entity.Comment
+	err := repository.db.Where("id = ? AND user_id = ?", id, userID).Delete(&comment)
+	if err.RowsAffected == 0 {
+		exception.PanicIfNeeded("Record not found")
+	}
+
+	return comment
+}

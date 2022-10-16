@@ -56,3 +56,10 @@ func (services *SocialMediaServicesImpl) UpdateSocialMedia(request dto.UpdateSoc
 
 	return res
 }
+
+func (services *SocialMediaServicesImpl) DeleteById(id int64, userId int64) response.SocialMediaResponse {
+	result := services.socialMediaRepo.Delete(id, userId)
+
+	res := response.NewSocialMediaResponse(result)
+	return res
+}

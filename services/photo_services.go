@@ -56,3 +56,10 @@ func (services *PhotoServicesImpl) UpdatePhoto(request dto.UpdatePhotoRequest) r
 
 	return res
 }
+
+func (services *PhotoServicesImpl) DeleteById(id int64, userId int64) response.PhotoResponse {
+	result := services.photoRepo.Delete(id, userId)
+
+	res := response.NewPhotoResponse(result)
+	return res
+}

@@ -18,22 +18,26 @@ type UserServices interface {
 	LoginUser(request dto.LoginRequest) response.UserResponse
 	FindUserByEmail(email string) response.UserResponse
 	UpdateUser(request dto.UpdateUserRequest) response.UserResponse
+	DeleteById(userId int64) response.UserResponse
 }
 
 type PhotoServices interface {
 	CreatePhoto(request dto.PhotoRequest) response.PhotoResponse
 	AllPhoto(userID int64) []response.PhotoResponseAll
 	UpdatePhoto(request dto.UpdatePhotoRequest) response.PhotoResponse
+	DeleteById(id int64, userId int64) response.PhotoResponse
 }
 
 type CommentServices interface {
 	CreateComment(request dto.CommentRequest) response.CommentResponse
 	AllComment(userID int64) []response.CommentResponseAll
 	UpdateComment(request dto.UpdateCommentRequest) response.CommentResponse
+	DeleteById(id int64, userId int64) response.CommentResponse
 }
 
 type SocialMediaServices interface {
 	CreateSocialMedia(request dto.SocialMediaRequest) response.SocialMediaResponse
 	AllSocialMedia(userID int64) []response.SocialMediaResponseAll
 	UpdateSocialMedia(request dto.UpdateSocialMediaRequest) response.SocialMediaResponse
+	DeleteById(id int64, userId int64) response.SocialMediaResponse
 }

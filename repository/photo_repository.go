@@ -38,3 +38,13 @@ func (repository *PhotoRepositoryImpl) Update(photo entity.Photo) entity.Photo {
 
 	return photo
 }
+
+func (repository *PhotoRepositoryImpl) Delete(id int64, userID int64) entity.Photo {
+	var photo entity.Photo
+	err := repository.db.Where("id = ? AND user_id = ?", id, userID).Delete(&photo)
+	if err.RowsAffected == 0 {
+		exception.PanicIfNeeded("Record not found")
+	}
+
+	return photo
+}

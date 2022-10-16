@@ -82,3 +82,10 @@ func (services *UserServicesImpl) UpdateUser(request dto.UpdateUserRequest) resp
 
 	return res
 }
+
+func (services *UserServicesImpl) DeleteById(userId int64) response.UserResponse {
+	result := services.userRepo.Delete(userId)
+
+	res := response.NewUserResponse(result)
+	return res
+}

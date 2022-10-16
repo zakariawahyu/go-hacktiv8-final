@@ -26,6 +26,7 @@ func (controller *UserController) Routes(app *fiber.App) {
 	app.Post("/users/register", controller.Register)
 	app.Post("/users/login", controller.Login)
 	app.Put("/users", middleware.AuthorizeJWT(controller.jwtServices), controller.Update)
+	app.Delete("/users", middleware.AuthorizeJWT(controller.jwtServices), controller.Delete)
 }
 func (controller *UserController) Register(ctx *fiber.Ctx) error {
 	var request dto.RegisterRequest
@@ -67,5 +68,17 @@ func (controller *UserController) Update(ctx *fiber.Ctx) error {
 
 	user := controller.userServices.UpdateUser(request)
 	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", user)
+	return ctx.JSON(res)
+}
+
+func (controller *UserController) Delete(ctx *fiber.Ctx) error {
+	claims := controller.jwtServices.GetClaimsJWT(ctx)
+	email := fmt.Sprintf("%v", claims["email"])
+	findUser := controller.userServices.FindUserByEmail(email)
+
+	_ = controller.userServices.DeleteById(findUser.ID)
+	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", fiber.Map{
+		"message": "Your account has been successfully deleted",
+	})
 	return ctx.JSON(res)
 }
