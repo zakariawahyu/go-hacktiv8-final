@@ -9,10 +9,8 @@ import (
 
 func ValidateUpdateUser(user dto.UpdateUserRequest) error {
 	return validation.ValidateStruct(&user,
-		validation.Field(&user.Username, validation.Required),
-		validation.Field(&user.Email, validation.Required, is.Email),
-		validation.Field(&user.Password, validation.Required, validation.Length(6, 0)),
-		validation.Field(&user.Age, validation.Required, validation.By(checkAge(user.Age))))
+		validation.Field(&user.Password, validation.Length(6, 0)),
+		validation.Field(&user.Age, validation.By(checkAge(user.Age))))
 }
 
 func ValidateRegisterUser(user dto.RegisterRequest) error {

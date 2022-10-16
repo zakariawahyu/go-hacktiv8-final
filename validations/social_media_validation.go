@@ -10,3 +10,9 @@ func ValidateSocialMedia(socialMedia dto.SocialMediaRequest) error {
 		validation.Field(&socialMedia.Name, validation.Required),
 		validation.Field(&socialMedia.SocialMediaUrl, validation.Required))
 }
+
+func ValidateUpdateSocialMedia(socialMedia dto.UpdateSocialMediaRequest) error {
+	return validation.ValidateStruct(&socialMedia,
+		validation.Field(&socialMedia.Name, validation.Required),
+		validation.Field(&socialMedia.SocialMediaUrl, validation.Required))
+}

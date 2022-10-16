@@ -31,3 +31,10 @@ func (repository *PhotoRepositoryImpl) GetAll(userID int64) []entity.Photo {
 
 	return photo
 }
+
+func (repository *PhotoRepositoryImpl) Update(photo entity.Photo) entity.Photo {
+	err := repository.db.Where("id = ? and user_id = ?", photo.ID, photo.UserID).Updates(&photo).First(&photo).Error
+	exception.PanicIfNeeded(err)
+
+	return photo
+}

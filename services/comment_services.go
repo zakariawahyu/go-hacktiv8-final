@@ -41,3 +41,18 @@ func (services *CommentServicesImpl) AllComment(userID int64) []response.Comment
 
 	return res
 }
+
+func (services *CommentServicesImpl) UpdateComment(request dto.UpdateCommentRequest) response.CommentResponse {
+	var comment entity.Comment
+
+	errValidate := validations.ValidateUpdateComment(request)
+	exception.PanicIfNeeded(errValidate)
+
+	errMap := smapping.FillStruct(&comment, smapping.MapFields(&request))
+	exception.PanicIfNeeded(errMap)
+
+	result := services.commentRepo.Update(comment)
+	res := response.NewCommentResponse(result)
+
+	return res
+}

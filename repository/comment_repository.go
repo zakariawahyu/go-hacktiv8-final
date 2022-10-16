@@ -31,3 +31,10 @@ func (repository *CommentRepositoryImpl) GetAll(userID int64) []entity.Comment {
 
 	return comment
 }
+
+func (repository *CommentRepositoryImpl) Update(comment entity.Comment) entity.Comment {
+	err := repository.db.Where("id = ? and user_id = ?", comment.ID, comment.UserID).Updates(&comment).First(&comment).Error
+	exception.PanicIfNeeded(err)
+
+	return comment
+}

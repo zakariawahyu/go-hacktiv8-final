@@ -10,3 +10,9 @@ func ValidatePhoto(photo dto.PhotoRequest) error {
 		validation.Field(&photo.Title, validation.Required),
 		validation.Field(&photo.PhotoUrl, validation.Required))
 }
+
+func ValidateUpdatePhoto(photo dto.UpdatePhotoRequest) error {
+	return validation.ValidateStruct(&photo,
+		validation.Field(&photo.Title, validation.Required),
+		validation.Field(&photo.PhotoUrl, validation.Required))
+}

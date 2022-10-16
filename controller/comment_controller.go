@@ -8,6 +8,7 @@ import (
 	"github.com/zakariawahyu/go-hacktiv8-final/exception"
 	"github.com/zakariawahyu/go-hacktiv8-final/middleware"
 	"github.com/zakariawahyu/go-hacktiv8-final/services"
+	"strconv"
 )
 
 type CommentController struct {
@@ -27,6 +28,7 @@ func NewCommentController(commentServices services.CommentServices, jwtServices 
 func (controller *CommentController) Routes(app *fiber.App) {
 	app.Post("/comments", middleware.AuthorizeJWT(controller.jwtServices), controller.Create)
 	app.Get("/comments", middleware.AuthorizeJWT(controller.jwtServices), controller.GetAllComment)
+	app.Put("/comments/:id", middleware.AuthorizeJWT(controller.jwtServices), controller.Update)
 }
 
 func (controller *CommentController) Create(ctx *fiber.Ctx) error {
@@ -51,6 +53,24 @@ func (controller *CommentController) GetAllComment(ctx *fiber.Ctx) error {
 	user := controller.userServices.FindUserByEmail(email)
 
 	comment := controller.commentServices.AllComment(user.ID)
+	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", comment)
+	return ctx.JSON(res)
+}
+
+func (controller *CommentController) Update(ctx *fiber.Ctx) error {
+	var request dto.UpdateCommentRequest
+	id, _ := strconv.Atoi(ctx.Params("id"))
+
+	err := ctx.BodyParser(&request)
+	exception.PanicIfNeeded(err)
+
+	claims := controller.jwtServices.GetClaimsJWT(ctx)
+	email := fmt.Sprintf("%v", claims["email"])
+	findUser := controller.userServices.FindUserByEmail(email)
+	request.ID = int64(id)
+	request.UserID = findUser.ID
+
+	comment := controller.commentServices.UpdateComment(request)
 	res := response.BuildSuccessResponse(fiber.StatusOK, "Success", comment)
 	return ctx.JSON(res)
 }

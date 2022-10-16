@@ -67,3 +67,18 @@ func (services *UserServicesImpl) FindUserByEmail(email string) response.UserRes
 
 	return res
 }
+
+func (services *UserServicesImpl) UpdateUser(request dto.UpdateUserRequest) response.UserResponse {
+	var user entity.User
+
+	errValidate := validations.ValidateUpdateUser(request)
+	exception.PanicIfNeeded(errValidate)
+
+	errMap := smapping.FillStruct(&user, smapping.MapFields(&request))
+	exception.PanicIfNeeded(errMap)
+
+	result := services.userRepo.Update(user)
+	res := response.NewUserResponse(result)
+
+	return res
+}

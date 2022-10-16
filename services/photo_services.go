@@ -41,3 +41,18 @@ func (services *PhotoServicesImpl) AllPhoto(userID int64) []response.PhotoRespon
 
 	return res
 }
+
+func (services *PhotoServicesImpl) UpdatePhoto(request dto.UpdatePhotoRequest) response.PhotoResponse {
+	var photo entity.Photo
+
+	errValidate := validations.ValidateUpdatePhoto(request)
+	exception.PanicIfNeeded(errValidate)
+
+	errMap := smapping.FillStruct(&photo, smapping.MapFields(&request))
+	exception.PanicIfNeeded(errMap)
+
+	result := services.photoRepo.Update(photo)
+	res := response.NewPhotoResponse(result)
+
+	return res
+}

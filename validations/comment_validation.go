@@ -10,3 +10,9 @@ func ValidateComment(comment dto.CommentRequest) error {
 		validation.Field(&comment.Message, validation.Required),
 		validation.Field(&comment.PhotoID, validation.Required))
 }
+
+func ValidateUpdateComment(comment dto.UpdateCommentRequest) error {
+	return validation.ValidateStruct(&comment,
+		validation.Field(&comment.Message, validation.Required),
+		validation.Field(&comment.PhotoID, validation.Required))
+}

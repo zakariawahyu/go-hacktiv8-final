@@ -35,6 +35,17 @@ func (repository *UserRepositoryImpl) FindByEmail(email string) entity.User {
 	return user
 }
 
+func (repository *UserRepositoryImpl) Update(user entity.User) entity.User {
+	if user.Password != "" {
+		user.Password = hashAndSalt([]byte(user.Password))
+	}
+
+	err := repository.db.Where("id = ?", user.ID).Updates(&user).First(&user, "id = ?", user.ID).Error
+	exception.PanicIfNeeded(err)
+
+	return user
+}
+
 func hashAndSalt(password []byte) string {
 	hash, err := bcrypt.GenerateFromPassword(password, bcrypt.MinCost)
 	exception.PanicIfNeeded(err)

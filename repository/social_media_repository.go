@@ -31,3 +31,10 @@ func (repository *SocialMediaRepositoryImpl) GetAll(userID int64) []entity.Socia
 
 	return socialMedia
 }
+
+func (repository *SocialMediaRepositoryImpl) Update(socialMedia entity.SocialMedia) entity.SocialMedia {
+	err := repository.db.Where("id = ? and user_id = ?", socialMedia.ID, socialMedia.UserID).Updates(&socialMedia).First(&socialMedia).Error
+	exception.PanicIfNeeded(err)
+
+	return socialMedia
+}

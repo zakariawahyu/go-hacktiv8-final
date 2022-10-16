@@ -41,3 +41,18 @@ func (services *SocialMediaServicesImpl) AllSocialMedia(userID int64) []response
 
 	return res
 }
+
+func (services *SocialMediaServicesImpl) UpdateSocialMedia(request dto.UpdateSocialMediaRequest) response.SocialMediaResponse {
+	var socialMedia entity.SocialMedia
+
+	errValidate := validations.ValidateUpdateSocialMedia(request)
+	exception.PanicIfNeeded(errValidate)
+
+	errMap := smapping.FillStruct(&socialMedia, smapping.MapFields(&request))
+	exception.PanicIfNeeded(errMap)
+
+	result := services.socialMediaRepo.Update(socialMedia)
+	res := response.NewSocialMediaResponse(result)
+
+	return res
+}
