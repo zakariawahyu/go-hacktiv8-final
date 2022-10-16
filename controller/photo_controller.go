@@ -6,6 +6,7 @@ import (
 	"github.com/zakariawahyu/go-hacktiv8-final/common/dto"
 	"github.com/zakariawahyu/go-hacktiv8-final/common/response"
 	"github.com/zakariawahyu/go-hacktiv8-final/exception"
+	"github.com/zakariawahyu/go-hacktiv8-final/middleware"
 	"github.com/zakariawahyu/go-hacktiv8-final/services"
 )
 
@@ -24,8 +25,8 @@ func NewPhotoController(photoServices services.PhotoServices, jwtServices servic
 }
 
 func (controller *PhotoController) Routes(app *fiber.App) {
-	app.Post("/photos", controller.Create)
-	app.Get("/photos", controller.GetAllPhoto)
+	app.Post("/photos", middleware.AuthorizeJWT(controller.jwtServices), controller.Create)
+	app.Get("/photos", middleware.AuthorizeJWT(controller.jwtServices), controller.GetAllPhoto)
 }
 
 func (controller *PhotoController) Create(ctx *fiber.Ctx) error {

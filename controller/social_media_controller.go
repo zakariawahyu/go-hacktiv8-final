@@ -6,6 +6,7 @@ import (
 	"github.com/zakariawahyu/go-hacktiv8-final/common/dto"
 	"github.com/zakariawahyu/go-hacktiv8-final/common/response"
 	"github.com/zakariawahyu/go-hacktiv8-final/exception"
+	"github.com/zakariawahyu/go-hacktiv8-final/middleware"
 	"github.com/zakariawahyu/go-hacktiv8-final/services"
 )
 
@@ -24,8 +25,8 @@ func NewSocialMediaController(socialMediaServices services.SocialMediaServices, 
 }
 
 func (controller *SocialMediaController) Routes(app *fiber.App) {
-	app.Post("/socialmedias", controller.Create)
-	app.Get("/socialmedias", controller.GetAllSocialMedia)
+	app.Post("/socialmedias", middleware.AuthorizeJWT(controller.jwtServices), controller.Create)
+	app.Get("/socialmedias", middleware.AuthorizeJWT(controller.jwtServices), controller.GetAllSocialMedia)
 }
 
 func (controller *SocialMediaController) Create(ctx *fiber.Ctx) error {

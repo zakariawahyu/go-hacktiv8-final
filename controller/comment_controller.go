@@ -6,6 +6,7 @@ import (
 	"github.com/zakariawahyu/go-hacktiv8-final/common/dto"
 	"github.com/zakariawahyu/go-hacktiv8-final/common/response"
 	"github.com/zakariawahyu/go-hacktiv8-final/exception"
+	"github.com/zakariawahyu/go-hacktiv8-final/middleware"
 	"github.com/zakariawahyu/go-hacktiv8-final/services"
 )
 
@@ -24,8 +25,8 @@ func NewCommentController(commentServices services.CommentServices, jwtServices 
 }
 
 func (controller *CommentController) Routes(app *fiber.App) {
-	app.Post("/comments", controller.Create)
-	app.Get("/comments", controller.GetAllComment)
+	app.Post("/comments", middleware.AuthorizeJWT(controller.jwtServices), controller.Create)
+	app.Get("/comments", middleware.AuthorizeJWT(controller.jwtServices), controller.GetAllComment)
 }
 
 func (controller *CommentController) Create(ctx *fiber.Ctx) error {
